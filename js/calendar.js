@@ -78,5 +78,20 @@ const Calendar = (() => {
       detail:{yearP:yp,monthP:mp,dayP:dp,hourP:hp}
     };
   }
-  return {calc};
+  function currentSolarTerm(date=new Date()){
+    const y=date.getFullYear();
+    const now=date.getTime();
+    const candidates=[];
+    for(const yy of [y-1,y]){
+      Object.entries(window.SOLAR_TERMS || {}).forEach(([key,t])=>{
+        if(!key.startsWith(String(yy)+"_")) return;
+        const name=key.slice(String(yy).length+1);
+        const when=new Date(yy, Number(t.month)-1, Number(t.day), Number(t.hour||0), Number(t.minute||0));
+        if(when.getTime()<=now) candidates.push({name,year:yy,...t,date:when});
+      });
+    }
+    candidates.sort((a,b)=>a.date-b.date);
+    return candidates[candidates.length-1] || null;
+  }
+  return {calc,currentSolarTerm};
 })();

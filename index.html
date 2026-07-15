@@ -2,107 +2,109 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>UG LAB</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>BodyOS｜推拿處はりきゅあ</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="app">
-  <div class="hero"><h1>UG LAB</h1><p>答えは身体にある。</p></div>
 
-  <section class="panel no-print">
-    <h2>患者情報</h2>
-    <div class="grid">
-      <div><label>患者名</label><input id="patientName" placeholder="氏名を入力"></div>
-      <div><label>診療日</label><input id="visitDate" type="date"></div>
-      <div><label>主訴</label><input id="chiefComplaint" placeholder="例：首肩こり・頭痛"></div>
+<!-- 患者のiPhone受付画面 -->
+<main id="receptionApp" class="reception-shell hidden">
+  <header class="reception-head"><div class="hero-label">推拿處はりきゅあ</div><h1>初診受付</h1><p>個人情報のみご入力ください。問診は院長がお話を伺います。</p></header>
+  <section id="receptionForm" class="panel reception-form">
+    <div class="form-grid two"><div><label>お名前 <span class="required">必須</span></label><input id="rName" autocomplete="name"></div><div><label>ふりがな</label><input id="rKana"></div></div>
+    <div class="form-grid four"><div><label>生年 <span class="required">必須</span></label><input id="rYear" type="number" inputmode="numeric" placeholder="1980"></div><div><label>月</label><input id="rMonth" type="number" inputmode="numeric" min="1" max="12"></div><div><label>日</label><input id="rDay" type="number" inputmode="numeric" min="1" max="31"></div><div><label>性別</label><select id="rGender"><option value="">選択</option><option>女</option><option>男</option><option>不明</option></select></div></div>
+    <details><summary>出生時刻（分かる方のみ）</summary><div class="form-grid two"><div><label>時</label><input id="rHour" type="number" min="0" max="23" inputmode="numeric"></div><div><label>分</label><input id="rMinute" type="number" min="0" max="59" inputmode="numeric"></div></div></details>
+    <div class="form-grid two"><div><label>郵便番号</label><input id="rPostal" inputmode="numeric" autocomplete="postal-code"></div><div><label>電話番号 <span class="required">必須</span></label><input id="rPhone" inputmode="tel" autocomplete="tel"></div></div>
+    <div><label>ご住所</label><input id="rAddress" autocomplete="street-address"></div>
+    <div class="form-grid two"><div><label>E-mail（任意）</label><input id="rEmail" type="email" autocomplete="email"></div><div><label>ご職業</label><input id="rOccupation"></div></div>
+    <div class="form-grid two"><div><label>勤務地</label><input id="rWorkplace"></div><div><label>通勤方法・所要時間</label><input id="rCommute"></div></div>
+    <label class="consent"><input id="rConsent" type="checkbox"><span>入力した個人情報を、推拿處はりきゅあの受付・カルテ作成に利用することに同意します。</span></label>
+    <button class="green large" onclick="Reception.submit()">受付を完了する</button>
+    <p id="receptionSubmitStatus" class="status-text"></p>
+  </section>
+  <section id="receptionThanks" class="panel hidden thanks"><h2>受付が完了しました</h2><p>この画面を閉じて、そのままお待ちください。</p></section>
+</main>
+
+<!-- 院内画面 -->
+<div id="clinicApp" class="app">
+  <div class="hero"><div class="hero-label">UG LAB</div><h1>BodyOS</h1><p>カルテは記憶媒体。BodyOSは治療のため。</p></div>
+
+  <nav class="step-nav no-print">
+    <a href="#receptionDesk"><span>1</span>受付</a><a href="#step2"><span>2</span>問診</a><a href="#step3"><span>3</span>BodyOS</a>
+  </nav>
+
+  <!-- 1 受付 -->
+  <section id="receptionDesk" class="panel no-print">
+    <div class="section-title"><span class="step-number">1</span><div><h2>受付</h2><p>患者さんのiPhone・院のiPad・紙から、同じ患者情報へ入ります。</p></div></div>
+    <div class="reception-layout">
+      <article id="qrBox" class="qr-card">
+        <h3>患者さんのiPhone受付</h3><img id="qrImage" alt="初診受付QRコード"><p class="small">同じWi-FiにつないだiPhoneで読み取ります。</p><a id="receptionLink" target="_blank"><span id="receptionUrl"></span></a>
+      </article>
+      <article id="qrUnavailable" class="qr-card hidden"><h3>QR受付はサーバー起動時に利用できます</h3><p>このフォルダの <b>start-bodyos.bat</b> から起動してください。index.htmlを直接開いた場合は、院のiPad入力を利用できます。</p></article>
+      <article class="queue-wrap"><div class="queue-head"><h3>受付待ち</h3><button class="small-btn" onclick="Reception.refresh()">更新</button></div><div id="receptionQueue"><p class="small">受付待ちはありません。</p></div><button onclick="Reception.useIPad()">院のiPadで直接入力</button></article>
     </div>
-    <div class="grid">
-      <div><label>年</label><input id="year" type="number" placeholder="西暦"></div>
-      <div><label>月</label><select id="month"><option value="">月</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select></div>
-      <div><label>日</label><select id="day"><option value="">日</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select></div>
-    </div>
-    <div class="grid">
-      <div><label>時</label><select id="hour"><option value="">不明</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option></select></div>
-      <div><label>分</label><select id="minute"><option value="">不明</option><option value="0">00</option><option value="1">01</option><option value="2">02</option><option value="3">03</option><option value="4">04</option><option value="5">05</option><option value="6">06</option><option value="7">07</option><option value="8">08</option><option value="9">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option><option value="35">35</option><option value="36">36</option><option value="37">37</option><option value="38">38</option><option value="39">39</option><option value="40">40</option><option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option><option value="45">45</option><option value="46">46</option><option value="47">47</option><option value="48">48</option><option value="49">49</option><option value="50">50</option><option value="51">51</option><option value="52">52</option><option value="53">53</option><option value="54">54</option><option value="55">55</option><option value="56">56</option><option value="57">57</option><option value="58">58</option><option value="59">59</option></select></div>
-      <div><label>性別</label><select id="gender"><option value="">選択</option><option>女</option><option>男</option><option>不明</option></select></div>
-    </div>
-    <button class="green" onclick="App.calc()">命式作成</button>
   </section>
 
-  <section id="analysis" class="card no-print"><p class="small">生年月日を入力して命式を作成してください。</p></section>
+  <!-- 個人情報。QRからもiPadからもここへ入る -->
+  <section id="step1" class="panel no-print">
+    <h2>患者情報</h2>
+    <div class="form-grid three"><div><label>お名前</label><input id="patientName"></div><div><label>ふりがな</label><input id="patientKana"></div><div><label>診療日</label><input id="visitDate" type="date"></div></div>
+    <div class="form-grid five"><div><label>年</label><input id="year" type="number" inputmode="numeric"></div><div><label>月</label><select id="month"><option value="">月</option></select></div><div><label>日</label><select id="day"><option value="">日</option></select></div><div><label>時</label><select id="hour"><option value="">不明</option></select></div><div><label>分</label><select id="minute"><option value="">不明</option></select></div></div>
+    <div class="form-grid three"><div><label>性別</label><select id="gender"><option value="">選択</option><option>女</option><option>男</option><option>不明</option></select></div><div><label>郵便番号</label><input id="postalCode" inputmode="numeric"></div><div><label>電話番号</label><input id="phone" inputmode="tel"></div></div>
+    <div><label>ご住所</label><input id="address"></div>
+    <div class="form-grid three"><div><label>E-mail</label><input id="email" type="email"></div><div><label>ご職業</label><input id="occupation"></div><div><label>勤務地</label><input id="workplace"></div></div>
+    <div><label>通勤方法・所要時間</label><input id="commute"></div>
+  </section>
+
+  <!-- 2 問診 -->
+  <section id="step2" class="panel no-print">
+    <div class="section-title"><span class="step-number">2</span><div><h2>問診カルテ</h2><p>患者さんに丸を付けてもらうのではなく、話を聞きながら院長が記録します。</p></div></div>
+    <div class="intake-toolbar"><button class="green" onclick="Intake.saveDraft()">入力途中を保存</button><button onclick="Intake.clearDraft()">入力を消す</button><span id="intakeStatus" class="small"></span></div>
+
+    <div class="form-grid four"><div><label>身長</label><input id="height" placeholder="cm"></div><div><label>体重</label><input id="weight" placeholder="kg"></div><div><label>血液型</label><input id="bloodType"></div><div><label>血圧</label><input id="bloodPressure" placeholder="例 120/80"></div></div>
+    <div class="form-grid three"><div><label>利き手</label><select id="dominantHand"><option value="">未入力</option><option>右</option><option>左</option><option>両方</option></select></div><div><label>喫煙</label><input id="smoking" placeholder="有無・年数・本数"></div><div><label>視力・眼鏡等</label><input id="vision"></div></div>
+    <div><label>家族構成・生活環境</label><textarea id="familyStructure" rows="3"></textarea></div>
+    <div class="form-grid two"><div><label>既往歴</label><textarea id="medicalHistory" rows="5"></textarea></div><div><label>家族の病歴</label><textarea id="familyHistory" rows="5"></textarea></div></div>
+    <div class="form-grid two"><div><label>睡眠</label><textarea id="sleepNotes" rows="4" placeholder="就寝・起床・寝付き・夜間覚醒・寝起きなど"></textarea></div><div><label>食習慣</label><textarea id="dietNotes" rows="4" placeholder="朝昼夜・間食・飲酒・水分・塩分・油分など"></textarea></div></div>
+    <div class="form-grid three"><div><label>処方薬</label><textarea id="medicationPrescription" rows="3"></textarea></div><div><label>市販薬</label><textarea id="medicationOTC" rows="3"></textarea></div><div><label>健康食品・サプリ</label><textarea id="supplements" rows="3"></textarea></div></div>
+    <div><label>本日の主訴</label><input id="chiefComplaint" placeholder="例：首肩こり・頭痛"></div>
+    <div><label>身体面</label><textarea id="physicalComplaint" rows="9" placeholder="いつから・どんな時・何処が・どうなる・原因と思うこと・冷え・便・皮膚・月経など、会話しながら自由に記録"></textarea></div>
+    <div class="form-grid two"><div><label>心理面</label><textarea id="psychologicalComplaint" rows="6"></textarea></div><div><label>ストレス</label><textarea id="stressCause" rows="6" placeholder="程度・主な原因・生活背景"></textarea><select id="stressLevel"><option value="">程度未入力</option><option>高</option><option>中</option><option>低</option></select></div></div>
+    <details class="intake-detail"><summary>補足項目</summary>
+      <div class="form-grid two"><div><label>運動・社会環境</label><textarea id="exerciseNotes" rows="4"></textarea></div><div><label>消化器・排便・排尿</label><textarea id="digestiveNotes" rows="4"></textarea></div></div>
+      <div class="form-grid two"><div><label>皮膚・発汗</label><textarea id="skinNotes" rows="4"></textarea></div><div><label>アレルギー</label><textarea id="allergyNotes" rows="4"></textarea></div></div>
+      <div class="form-grid two"><div><label>女性の方のみ</label><textarea id="womenNotes" rows="4" placeholder="月経・妊娠・出産・更年期など"></textarea></div><div><label>その他</label><textarea id="otherNotes" rows="4"></textarea></div></div>
+    </details>
+  </section>
+
+  <!-- 3 BodyOS -->
+  <section id="step3" class="panel no-print">
+    <div class="section-title"><span class="step-number">3</span><div><h2>BodyOS</h2><p>設計図・季節・現在地を治療のためにまとめます。</p></div></div>
+    <button class="green large" onclick="App.calc()">命式・BodyOSを作成</button>
+  </section>
+  <section id="analysis" class="card no-print"><p class="small">生年月日を入力してBodyOSを作成してください。</p></section>
 
   <section class="panel no-print">
     <h2>施術前テスト</h2>
-    <div class="ug6-grid"><div class="ug6-card"><label><input type="checkbox" class="beforeTest" value="①">①止まれない</label></div><div class="ug6-card"><label><input type="checkbox" class="beforeTest" value="②">②上に浮く</label></div><div class="ug6-card"><label><input type="checkbox" class="beforeTest" value="③">③外に漏れる</label></div><div class="ug6-card"><label><input type="checkbox" class="beforeTest" value="④">④時間が合わない</label></div><div class="ug6-card"><label><input type="checkbox" class="beforeTest" value="⑤">⑤頭に集まる</label></div><div class="ug6-card"><label><input type="checkbox" class="beforeTest" value="⑥">⑥受け取れない</label></div></div>
-    <button class="green" onclick="App.beforeJudge()">施術前判定</button>
-    <div id="beforeResult" class="small"></div>
+    <div class="ug6-grid" id="beforeTests"></div><button class="green" onclick="App.beforeJudge()">施術前判定</button><div id="beforeResult" class="small"></div>
   </section>
-
   <section class="panel no-print">
     <h2>施術後テスト</h2>
-    <div class="ug6-grid"><div class="ug6-card"><label><input type="checkbox" class="afterTest" value="①">①止まれない</label></div><div class="ug6-card"><label><input type="checkbox" class="afterTest" value="②">②上に浮く</label></div><div class="ug6-card"><label><input type="checkbox" class="afterTest" value="③">③外に漏れる</label></div><div class="ug6-card"><label><input type="checkbox" class="afterTest" value="④">④時間が合わない</label></div><div class="ug6-card"><label><input type="checkbox" class="afterTest" value="⑤">⑤頭に集まる</label></div><div class="ug6-card"><label><input type="checkbox" class="afterTest" value="⑥">⑥受け取れない</label></div></div>
-    <button class="green" onclick="App.afterJudge()">施術後判定</button>
-    <div id="afterResult" class="small"></div>
+    <div class="ug6-grid" id="afterTests"></div><button class="green" onclick="App.afterJudge()">施術後判定</button><div id="afterResult" class="small"></div>
   </section>
 
   <section class="panel no-print">
-    <h2>研究モード</h2>
-    <label class="switch-row"><input id="researchMode" type="checkbox" onchange="Records.toggleResearchMode()"><span>研究データとして残す時だけON</span></label>
-    <p class="small">通常診療ではOFFのままで使えます。保存したい症例だけONにしてください。</p>
+    <h2>記録と出力（既存機能）</h2>
+    <div class="form-grid three"><div><label>施術メモ</label><input id="treatmentMemo"></div><div><label>セルフケア</label><input id="homeCare"></div><div><label>次回確認</label><input id="nextCheck"></div></div>
+    <button class="green" onclick="App.autoCare()">UGから自動入力</button><div id="autoCare" class="autocare-box"></div>
+    <div class="form-grid two"><button onclick="Reports.chart()">カルテ作成</button><button onclick="Reports.patient()">患者レポート作成</button></div>
+    <input id="researchMode" type="checkbox" class="hidden"><select id="outcome" class="hidden"><option value=""></option></select><input id="researchId" class="hidden"><div id="qualityStatus" class="hidden"></div><div id="researchOnly" class="hidden"></div>
   </section>
-
-  <section class="panel no-print">
-    <h2>記録と出力</h2>
-    <div class="grid">
-      <div><label>施術メモ</label><input id="treatmentMemo" placeholder="UG判定から自動入力されます。必要なら修正"></div>
-      <div><label>セルフケア</label><input id="homeCare" placeholder="UG判定から自動入力されます。必要なら修正"></div>
-      <div><label>次回確認</label><input id="nextCheck" placeholder="UG判定から自動入力されます。必要なら修正"></div>
-    </div>
-    <button class="green" onclick="App.autoCare()">UGから自動入力</button>
-    <div id="autoCare" class="autocare-box"></div>
-
-    <div id="researchOnly" class="research-only hidden">
-      <div class="grid">
-        <div><label>予後評価</label><select id="outcome"><option value="">未評価</option><option value="著明改善">著明改善</option><option value="改善">改善</option><option value="やや改善">やや改善</option><option value="変化なし">変化なし</option><option value="悪化">悪化</option></select></div>
-        <div><label>研究ID</label><input id="researchId" placeholder="保存時に自動採番" readonly></div>
-        <div><label>データ品質</label><div id="qualityStatus" class="quality-status">未チェック</div></div>
-      </div>
-      <div class="grid2">
-        <button class="green" onclick="Records.save()">研究データとして保存</button>
-        <button onclick="Records.checkQuality()">保存チェック</button>
-      </div>
-      <details class="record-panel">
-        <summary>研究データ管理</summary>
-        <div class="grid2">
-          <button onclick="Records.exportJSON()">JSON出力</button>
-          <button onclick="Records.exportCSV()">CSV出力</button>
-        </div>
-        <div class="grid2 danger-row">
-          <button class="danger" onclick="Records.deleteCurrentPatient()">この患者の研究データを削除</button>
-          <button class="danger" onclick="Records.deleteAllData()">全研究データを削除</button>
-        </div>
-        <div id="recordStatus" class="small"></div>
-        <pre id="recordPreview"></pre>
-      </details>
-    </div>
-
-    <div class="grid2">
-      <button onclick="Reports.chart()">カルテ作成</button>
-      <button onclick="Reports.patient()">患者レポート作成</button>
-    </div>
-  </section>
-
-  <section id="chartReport" class="hidden"></section>
-  <section id="patientReport" class="hidden"></section>
+  <section id="chartReport" class="hidden"></section><section id="patientReport" class="hidden"></section>
 </div>
 
-<script src="data/solarTerms.js"></script>
-<script src="data/ugdb.js"></script>
-<script src="js/calendar.js"></script>
-<script src="js/bodyos.js"></script>
-<script src="js/reports.js"></script>
-<script src="js/records.js"></script>
-<script src="js/app.js"></script>
+<script src="data/solarTerms.js"></script><script src="data/ugdb.js"></script><script src="data/caredb.js"></script>
+<script src="js/calendar.js"></script><script src="js/bodyos.js"></script><script src="js/intake.js"></script><script src="js/reception.js"></script><script src="js/reports.js"></script><script src="js/records.js"></script><script src="js/app.js"></script>
 </body>
 </html>
