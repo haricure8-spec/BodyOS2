@@ -85,10 +85,26 @@ function findPatientsByNameAndBirth(name, birth) {
 
 function localIP() {
   const nets = os.networkInterfaces();
-  for (const list of Object.values(nets)) for (const n of list || []) {
-    if (n.family === 'IPv4' && !n.internal && !n.address.startsWith('169.254.')) return n.address;
+  const candidates = [];
+  for (const [adapter, list] of Object.entries(nets)) for (const n of list || []) {
+    if (n.family !== 'IPv4' || n.internal || n.address.startsWith('169.254.')) continue;
+    candidates.push({ adapter, address: n.address });
   }
-  return 'localhost';
+  // 院内Wi-Fiで一般的な 192.168.x.x を最優先。
+  // Docker / WSL / VPN の 172.x.x.x を先に拾ってQRが開けなくなるのを防ぐ。
+  const score = ({adapter,address}) => {
+    const a = adapter.toLowerCase();
+    let s = 0;
+    if (address.startsWith('192.168.')) s += 100;
+    else if (address.startsWith('10.')) s += 80;
+    else if (/^172\.(1[6-9]|2\d|3[01])\./.test(address)) s += 20;
+    if (/(wi-?fi|wireless|wlan)/i.test(a)) s += 30;
+    if (/(ethernet|イーサネット)/i.test(a)) s += 15;
+    if (/(virtual|vmware|hyper-v|vethernet|docker|wsl|vpn|loopback)/i.test(a)) s -= 80;
+    return s;
+  };
+  candidates.sort((a,b) => score(b) - score(a));
+  return candidates[0]?.address || 'localhost';
 }
 function mime(file) {
   const ext = path.extname(file).toLowerCase();
@@ -191,7 +207,7 @@ const server = http.createServer(async (req, res) => {
   if (!file.startsWith(ROOT) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
     res.writeHead(404); return res.end('Not found');
   }
-  res.writeHead(200, { 'Content-Type': mime(file), 'Cache-Control': file.endsWith('.html') ? 'no-store' : 'public, max-age=300' });
+  res.writeHead(200, { 'Content-Type': mime(file), 'Cache-Control': /\.(html|js|css)$/.test(file) ? 'no-store' : 'public, max-age=300' });
   fs.createReadStream(file).pipe(res);
 });
 
