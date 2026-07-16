@@ -69,6 +69,17 @@ function patientIdentity(p) {
   return `${String(p.name||'').replace(/\s+/g,'')}|${birth.year||''}-${birth.month||''}-${birth.day||''}|${String(p.phone||'').replace(/\D/g,'')}`;
 }
 
+function normalizedName(v) { return String(v || '').replace(/[\s　]+/g, '').toLowerCase(); }
+function normalizedDatePart(v) { const n = Number(v); return Number.isFinite(n) ? String(n) : String(v || '').trim(); }
+function findPatientsByNameAndBirth(name, birth) {
+  const db = readDatabase();
+  const y = normalizedDatePart(birth?.year), m = normalizedDatePart(birth?.month), d = normalizedDatePart(birth?.day);
+  return (db.patients || []).filter(p => normalizedName(p.name) === normalizedName(name)
+    && normalizedDatePart(p.birth?.year) === y
+    && normalizedDatePart(p.birth?.month) === m
+    && normalizedDatePart(p.birth?.day) === d);
+}
+
 function localIP() {
   const nets = os.networkInterfaces();
   for (const list of Object.values(nets)) for (const n of list || []) {
@@ -127,6 +138,32 @@ const server = http.createServer(async (req, res) => {
   if (url.pathname === '/api/reception' && req.method === 'GET') {
     return json(res, 200, readQueue().filter(x => x.status === 'pending'));
   }
+  if (url.pathname === '/api/reception/revisit' && req.method === 'POST') {
+    try {
+      const input = await body(req);
+      const name = safeText(input.name, 80);
+      const birth = input.birth || {};
+      if (!name || !safeText(birth.year,4) || !safeText(birth.month,2) || !safeText(birth.day,2)) {
+        return json(res, 400, { error: 'お名前と生年月日を入力してください。' });
+      }
+      const matches = findPatientsByNameAndBirth(name, birth);
+      if (!matches.length) return json(res, 404, { error: '一致するカルテが見つかりません。受付へお声がけください。' });
+      if (matches.length > 1) return json(res, 409, { error: '同じお名前・生年月日のカルテが複数あります。受付へお声がけください。' });
+      const patient = matches[0];
+      const db = readDatabase();
+      const records = (db.records || []).filter(r => r.patientId === patient.patientId).sort((a,b)=>String(b.visitDate||'').localeCompare(String(a.visitDate||'')));
+      const rows = readQueue();
+      const row = {
+        id: `R${Date.now()}${Math.random().toString(36).slice(2,6)}`,
+        status: 'pending', receptionType: 'revisit', submittedAt: new Date().toISOString(),
+        patientId: patient.patientId, lastVisit: records[0]?.visitDate || '', visitCount: records.length,
+        ...patient, name: patient.name, birth: patient.birth || birth
+      };
+      rows.push(row); writeQueue(rows);
+      return json(res, 201, { ok:true, id:row.id, patientId:patient.patientId });
+    } catch (e) { return json(res, 400, { error: e.message || '入力内容を読み取れませんでした。' }); }
+  }
+
   if (url.pathname === '/api/reception' && req.method === 'POST') {
     try {
       const input = sanitize(await body(req));
@@ -134,7 +171,7 @@ const server = http.createServer(async (req, res) => {
         return json(res, 400, { error: '氏名・生年月日・電話番号は必須です。' });
       }
       const rows = readQueue();
-      const row = { id: `R${Date.now()}${Math.random().toString(36).slice(2,6)}`, status: 'pending', submittedAt: new Date().toISOString(), ...input };
+      const row = { id: `R${Date.now()}${Math.random().toString(36).slice(2,6)}`, status: 'pending', receptionType: 'new', submittedAt: new Date().toISOString(), ...input };
       rows.push(row); writeQueue(rows);
       return json(res, 201, { ok: true, id: row.id });
     } catch { return json(res, 400, { error: '入力内容を読み取れませんでした。' }); }

@@ -1,0 +1,26 @@
+BodyOS2 QR再診受付 実装更新
+
+【変更ファイル】
+index.html
+server.js
+js/reception.js
+css/style.css
+
+【上書き方法】
+1. GitHub Desktopで BodyOS2 を開く
+2. Show in Explorer を押す
+3. この更新フォルダの中身をBodyOS2へコピーする
+4. 「ファイルを置き換える」を選ぶ
+5. clinic_data は触らない（患者データを守るため）
+6. GitHub Desktopに戻る
+7. Summaryに「QR再診受付追加」と入力
+8. Commit to main → Push origin
+
+【確認方法】
+BodyOSサーバーを起動し、QRを読む。
+受付画面に「初めての方」「再診の方」が表示される。
+再診は名前＋生年月日で受付し、院側の受付待ちから「カルテを開く」。
+
+【重要】
+再診照合は院内PCの clinic_data/database.json に保存済みの患者だけが対象。
+同姓同名・同一生年月日が複数ある場合は自動で開かず、受付へ案内する。

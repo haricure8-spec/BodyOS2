@@ -85,3 +85,12 @@ textarea{width:100%;font-size:17px;padding:12px;border-radius:12px;border:1px so
 .module-divider span{font-weight:700;font-size:20px;color:#154266}.module-divider small{color:#666}
 .engine-ug-axis{display:flex;flex-direction:column;gap:4px;padding:12px 14px;margin-bottom:10px;border-left:5px solid #154266;background:#f4f7f9;border-radius:8px}
 @media(max-width:700px){.ug-axis-head{display:block}.ug-axis-head .small-btn{margin-top:10px}.ug-priority-row{grid-template-columns:42px 1fr}.ug-priority-code{width:40px;height:40px}}
+
+/* v3.6 初診・再診QR受付 */
+.reception-mode-tabs{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}
+.mode-tab{margin:0;background:#f8f6f1;color:#154266;border:1px solid #d8c9b5;font-size:17px;font-weight:900}
+.mode-tab.active{background:#154266;color:#fff;border-color:#154266}
+.reception-guide{padding:12px 14px;border-left:5px solid #b8924a;background:#f8f6f1;border-radius:10px;line-height:1.6;margin:0 0 14px}
+.reception-badge{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:900}
+.reception-badge.new{background:#e8f1f7;color:#154266}.reception-badge.revisit{background:#f2e8d4;color:#76591d}
+@media(max-width:520px){.reception-mode-tabs{grid-template-columns:1fr 1fr}.mode-tab{font-size:15px;padding:11px 5px}}
