@@ -94,3 +94,10 @@ textarea{width:100%;font-size:17px;padding:12px;border-radius:12px;border:1px so
 .reception-badge{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:900}
 .reception-badge.new{background:#e8f1f7;color:#154266}.reception-badge.revisit{background:#f2e8d4;color:#76591d}
 @media(max-width:520px){.reception-mode-tabs{grid-template-columns:1fr 1fr}.mode-tab{font-size:15px;padding:11px 5px}}
+
+/* 受付送信ボタンを常に見える位置へ固定 */
+.reception-submit-sticky{position:sticky;top:8px;z-index:30;background:rgba(248,246,241,.97);border:2px solid #b8924a;border-radius:14px;padding:10px;margin:0 0 16px;box-shadow:0 8px 20px rgba(21,66,102,.14);backdrop-filter:blur(8px)}
+.reception-submit-sticky button{margin:0;width:100%}
+.reception-submit-sticky .small{margin:7px 2px 0;line-height:1.45;color:#5b554d}
+.reception-bottom-submit{margin-top:18px}
+@media(max-width:760px){.reception-submit-sticky{top:max(6px,env(safe-area-inset-top));padding:9px}.reception-submit-sticky button{font-size:17px;padding:14px 10px}}

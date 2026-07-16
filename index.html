@@ -16,6 +16,11 @@
       <button id="modeNew" type="button" class="mode-tab active" onclick="Reception.setMode('new')">初めての方</button>
       <button id="modeRevisit" type="button" class="mode-tab" onclick="Reception.setMode('revisit')">再診の方</button>
     </div>
+    <div class="reception-submit-sticky" aria-label="受付送信">
+      <button id="stickySubmitNew" type="button" class="green large" onclick="Reception.submit()">初診受付を送信する</button>
+      <button id="stickySubmitRevisit" type="button" class="green large hidden" onclick="Reception.submitRevisit()">再診受付を送信する</button>
+      <p class="small">入力後、このボタンを押すと院内PCの「受付待ち」へ届きます。</p>
+    </div>
 
     <div id="newReceptionForm">
       <p class="reception-guide"><b>初めての方</b><br>個人情報のみご入力ください。問診は院長がお話を伺います。</p>
@@ -27,14 +32,14 @@
       <div class="form-grid two"><div><label>E-mail（任意）</label><input id="rEmail" type="email" autocomplete="email"></div><div><label>ご職業</label><input id="rOccupation"></div></div>
       <div class="form-grid two"><div><label>勤務地</label><input id="rWorkplace"></div><div><label>通勤方法・所要時間</label><input id="rCommute"></div></div>
       <label class="consent"><input id="rConsent" type="checkbox"><span>入力した個人情報を、推拿處はりきゅあの受付・カルテ作成に利用することに同意します。</span></label>
-      <button class="green large" onclick="Reception.submit()">初診受付を完了する</button>
+      <button type="button" class="green large reception-bottom-submit" onclick="Reception.submit()">初診受付を送信する</button>
     </div>
 
     <div id="revisitReceptionForm" class="hidden">
       <p class="reception-guide"><b>再診の方</b><br>お名前と生年月日をご入力ください。院のカルテを受付へ呼び出します。</p>
       <div><label>お名前 <span class="required">必須</span></label><input id="rrName" autocomplete="name" placeholder="例：山田 太郎"></div>
       <div class="form-grid three"><div><label>生年 <span class="required">必須</span></label><input id="rrYear" type="number" inputmode="numeric" placeholder="1980"></div><div><label>月 <span class="required">必須</span></label><input id="rrMonth" type="number" inputmode="numeric" min="1" max="12"></div><div><label>日 <span class="required">必須</span></label><input id="rrDay" type="number" inputmode="numeric" min="1" max="31"></div></div>
-      <button class="green large" onclick="Reception.submitRevisit()">再診受付を完了する</button>
+      <button type="button" class="green large reception-bottom-submit" onclick="Reception.submitRevisit()">再診受付を送信する</button>
     </div>
     <p id="receptionSubmitStatus" class="status-text"></p>
   </section>
@@ -43,7 +48,7 @@
 
 <!-- 院内画面 -->
 <div id="clinicApp" class="app">
-  <div class="hero"><div class="hero-label">UG LAB</div><h1>BodyOS <small style="font-size:.35em;opacity:.75">v3.9</small></h1><p>カルテは記憶媒体。BodyOSは治療のため。</p></div>
+  <div class="hero"><div class="hero-label">UG LAB</div><h1>BodyOS</h1><p>カルテは記憶媒体。BodyOSは治療のため。</p></div>
 
   <nav class="step-nav no-print">
     <a href="#receptionDesk"><span>1</span>受付</a><a href="#step2"><span>2</span>問診</a><a href="#step3"><span>3</span>BodyOS</a><a href="#step4"><span>4</span>日報</a>
@@ -54,7 +59,7 @@
     <div class="section-title"><span class="step-number">1</span><div><h2>受付</h2><p>患者さんのiPhone・院のiPad・紙から、同じ患者情報へ入ります。</p></div></div>
     <div class="reception-layout">
       <article id="qrBox" class="qr-card">
-        <h3>患者さんのiPhone受付</h3><img id="qrImage" src="/api/reception/qr?v=39" alt="初診・再診共通受付QRコード"><p id="qrStatus" class="small">QRが表示されない場合は、下の受付URLをタップしてください。</p><p class="small">同じWi-FiにつないだiPhoneで読み取ります。</p><a id="receptionLink" target="_blank"><span id="receptionUrl"></span></a>
+        <h3>患者さんのiPhone受付</h3><img id="qrImage" alt="初診受付QRコード"><p class="small">同じWi-FiにつないだiPhoneで読み取ります。</p><a id="receptionLink" target="_blank"><span id="receptionUrl"></span></a>
       </article>
       <article id="qrUnavailable" class="qr-card hidden"><h3>QR受付はサーバー起動時に利用できます</h3><p>このフォルダの <b>start-bodyos.bat</b> から起動してください。index.htmlを直接開いた場合は、院のiPad入力を利用できます。</p></article>
       <article class="queue-wrap"><div class="queue-head"><h3>受付待ち</h3><button class="small-btn" onclick="Reception.refresh()">更新</button></div><div id="receptionQueue"><p class="small">受付待ちはありません。</p></div><button onclick="Reception.useIPad()">院のiPadで直接入力</button></article>
