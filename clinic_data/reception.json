@@ -1,1 +1,48 @@
-[]
+[
+  {
+    "id": "R1784079760298pisv",
+    "status": "accepted",
+    "submittedAt": "2026-07-15T01:42:40.298Z",
+    "name": "長谷川武司",
+    "kana": "はせがわたけし",
+    "birth": {
+      "year": "1968",
+      "month": "3",
+      "day": "6",
+      "hour": "22",
+      "minute": "05"
+    },
+    "gender": "男",
+    "postal": "9500861",
+    "address": "新潟市東区中山5-6-11",
+    "phone": "09039078939",
+    "email": "haricure8@gmail.com",
+    "occupation": "エンジニア",
+    "workplace": "",
+    "commute": "",
+    "acceptedAt": "2026-07-15T01:42:57.085Z"
+  },
+  {
+    "id": "R1784080825592j9vx",
+    "status": "accepted",
+    "submittedAt": "2026-07-15T02:00:25.592Z",
+    "name": "齋藤いつか",
+    "kana": "さいとういつか",
+    "birth": {
+      "year": "1989",
+      "month": "11",
+      "day": "17",
+      "hour": "",
+      "minute": ""
+    },
+    "gender": "女",
+    "postal": "9502041",
+    "address": "新潟市西区坂井東1-11-13",
+    "phone": "09078273363",
+    "email": "",
+    "occupation": "",
+    "workplace": "",
+    "commute": "",
+    "acceptedAt": "2026-07-15T02:00:40.338Z"
+  }
+]

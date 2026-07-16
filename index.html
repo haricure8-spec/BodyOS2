@@ -31,7 +31,7 @@
   <div class="hero"><div class="hero-label">UG LAB</div><h1>BodyOS</h1><p>カルテは記憶媒体。BodyOSは治療のため。</p></div>
 
   <nav class="step-nav no-print">
-    <a href="#receptionDesk"><span>1</span>受付</a><a href="#step2"><span>2</span>問診</a><a href="#step3"><span>3</span>BodyOS</a>
+    <a href="#receptionDesk"><span>1</span>受付</a><a href="#step2"><span>2</span>問診</a><a href="#step3"><span>3</span>BodyOS</a><a href="#step4"><span>4</span>日報</a>
   </nav>
 
   <!-- 1 受付 -->
@@ -101,10 +101,97 @@
     <div class="form-grid two"><button onclick="Reports.chart()">カルテ作成</button><button onclick="Reports.patient()">患者レポート作成</button></div>
     <input id="researchMode" type="checkbox" class="hidden"><select id="outcome" class="hidden"><option value=""></option></select><input id="researchId" class="hidden"><div id="qualityStatus" class="hidden"></div><div id="researchOnly" class="hidden"></div>
   </section>
+
+
+  <!-- 4 日報・診察記録 -->
+  <section id="step4" class="panel no-print daily-panel">
+    <div class="section-title"><span class="step-number">4</span><div><h2>BodyOS診療記録</h2><p>UGLABで身体の現在地を定め、長野式診断モジュールで処置法を絞り込みます。</p></div></div>
+
+    <article class="daily-card ug-axis-card">
+      <div class="ug-axis-head">
+        <div><div class="os-kicker">Current OS｜最上位</div><h3>UGLAB 現在地</h3><p class="small">長野式の所見より先に、今日の身体が何を優先しているかを確認します。</p></div>
+        <button class="small-btn" onclick="Daily.refreshUGPriority()">現在地を更新</button>
+      </div>
+      <div id="ugPriority" class="ug-priority"><p class="small">施術前UGLABを選択すると、治療の入口と再検査が表示されます。</p></div>
+    </article>
+
+    <div class="module-divider"><span>長野式診断モジュール</span><small>脉状・腹診・火穴診・局所診</small></div>
+
+    <div class="daily-grid">
+      <article class="daily-card">
+        <h3>脉状</h3><p class="small">必要な脉状を複数選択。</p>
+        <div id="pulseChoices" class="choice-grid"></div>
+        <label>脉状メモ</label><textarea id="pulseMemo" rows="3" placeholder="左右差、前後の変化など"></textarea>
+      </article>
+
+      <article class="daily-card">
+        <h3>腹診</h3><p class="small">腹位をタップ。1回＝反応、2回＝強反応、3回＝解除。</p>
+        <div id="abdomenMap" class="abdomen-map"></div>
+        <label>腹診メモ</label><textarea id="abdomenMemo" rows="3" placeholder="必要な補足だけ"></textarea>
+      </article>
+    </div>
+
+    <div class="daily-grid">
+      <article class="daily-card">
+        <h3>火穴診</h3><p class="small">図は使わず、左右上下肢の火穴名をタップします。</p>
+        <div id="fireMap" class="fire-diagnosis"></div>
+        <label>火穴診メモ</label><textarea id="fireMemo" rows="3"></textarea>
+      </article>
+
+      <article class="daily-card">
+        <h3>局所診</h3><p class="small">反応部位をタップします。</p>
+        <div id="localMap" class="body-map"></div>
+        <label>局所診メモ</label><textarea id="localMemo" rows="3" placeholder="可動、圧痛、左右差など"></textarea>
+      </article>
+    </div>
+
+    <div class="daily-grid treatment-grid">
+      <article class="daily-card routine-card">
+        <h3>ルーティン処置</h3><p class="small">診断とは別に、高頻度で行う基本処置。</p>
+        <div id="routineChoices" class="choice-grid"></div>
+      </article>
+
+      <article class="daily-card treatment-method-card">
+        <h3>処置法</h3><p class="small">穴名は出さず、処置法までを記録します。</p>
+        <div id="treatmentMethodChoices" class="choice-grid"></div>
+      </article>
+    </div>
+
+    <article class="daily-card suggestions-card">
+      <div class="suggestion-head"><div><h3>BodyOS統合判断（ちゃんペラ）</h3><p class="small">UGLABの優先方向を軸に、長野式所見から処置法候補だけを表示します。</p></div><button class="small-btn" onclick="Daily.refreshSuggestions()">候補を更新</button></div>
+      <div id="treatmentSuggestions" class="suggestion-list"><p class="small">所見を入力すると候補が表示されます。</p></div>
+      <div class="engine-note">処置穴・補瀉・手順は表示しません。現在の確定ルールは「火穴反応 → 気水穴処置」のみです。</div>
+    </article>
+
+    <article class="daily-card">
+      <h3>実施手技（カルテ記録）</h3>
+      <div id="manualTechniqueChoices" class="choice-grid"></div>
+      <label>追加した処置・施術内容</label><textarea id="dailyTreatmentMemo" rows="3" placeholder="必要な補足だけ"></textarea>
+    </article>
+
+    <article class="daily-card">
+      <h3>再検査・変化</h3><p class="small">診察時と同じ基準で変化を確認します。</p>
+      <div id="changeChoices" class="choice-grid"></div>
+      <div class="form-grid two"><div><label>施術前の所見</label><textarea id="beforeFindingMemo" rows="4"></textarea></div><div><label>施術後の所見</label><textarea id="afterFindingMemo" rows="4"></textarea></div></div>
+      <label>経過・今日の気付き</label><textarea id="dailyInsight" rows="4"></textarea>
+    </article>
+
+    <article class="daily-card case-summary-card">
+      <div class="suggestion-head"><div><h3>症例記録プレビュー</h3><p class="small">UGLABを軸に「現在地 → 長野式所見 → 処置法 → 再検査」の形で整理します。</p></div><button class="small-btn" onclick="Daily.refreshCaseSummary()">更新</button></div>
+      <div id="caseSummary" class="case-summary"><p class="small">入力後に更新してください。</p></div>
+    </article>
+
+    <div class="save-bar">
+      <button class="green large" onclick="Daily.saveToClinic()">院内PCへ保存</button>
+      <button onclick="Daily.clearDaily()">日報だけクリア</button>
+      <span id="dailySaveStatus" class="status-text"></span>
+    </div>
+  </section>
+
   <section id="chartReport" class="hidden"></section><section id="patientReport" class="hidden"></section>
 </div>
 
-<script src="data/solarTerms.js"></script><script src="data/ugdb.js"></script><script src="data/caredb.js"></script>
-<script src="js/calendar.js"></script><script src="js/bodyos.js"></script><script src="js/intake.js"></script><script src="js/reception.js"></script><script src="js/reports.js"></script><script src="js/records.js"></script><script src="js/app.js"></script>
+<script src="data/solarTerms.js"></script><script src="data/ugdb.js"></script><script src="data/caredb.js"></script><script src="data/dailyrules.js"></script>
+<script src="js/calendar.js"></script><script src="js/bodyos.js"></script><script src="js/intake.js"></script><script src="js/daily.js"></script><script src="js/reception.js"></script><script src="js/reports.js"></script><script src="js/records.js"></script><script src="js/app.js"></script>
 </body>
 </html>
