@@ -191,8 +191,15 @@ const server = http.createServer(async (req, res) => {
   if (!file.startsWith(ROOT) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
     res.writeHead(404); return res.end('Not found');
   }
-  res.writeHead(200, { 'Content-Type': mime(file), 'Cache-Control': file.endsWith('.html') ? 'no-store' : 'public, max-age=300' });
+  res.writeHead(200, { 'Content-Type': mime(file), 'Cache-Control': 'no-store, no-cache, must-revalidate' });
   fs.createReadStream(file).pipe(res);
+});
+
+server.on('error', (err) => {
+  if (err && err.code === 'EADDRINUSE') {
+    console.error('\nBodyOSを起動できません。3000番ポートで古いBodyOSが動いています。');
+    console.error('開いているBodyOSの黒い画面を閉じるか、PCを再起動してからもう一度起動してください。\n');
+  } else { console.error(err); }
 });
 
 server.listen(PORT, '0.0.0.0', () => {

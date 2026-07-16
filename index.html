@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>BodyOS｜推拿處はりきゅあ</title>
+<title>BodyOS v3.9｜推拿處はりきゅあ</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -43,7 +43,7 @@
 
 <!-- 院内画面 -->
 <div id="clinicApp" class="app">
-  <div class="hero"><div class="hero-label">UG LAB</div><h1>BodyOS</h1><p>カルテは記憶媒体。BodyOSは治療のため。</p></div>
+  <div class="hero"><div class="hero-label">UG LAB</div><h1>BodyOS <small style="font-size:.35em;opacity:.75">v3.9</small></h1><p>カルテは記憶媒体。BodyOSは治療のため。</p></div>
 
   <nav class="step-nav no-print">
     <a href="#receptionDesk"><span>1</span>受付</a><a href="#step2"><span>2</span>問診</a><a href="#step3"><span>3</span>BodyOS</a><a href="#step4"><span>4</span>日報</a>
@@ -54,7 +54,7 @@
     <div class="section-title"><span class="step-number">1</span><div><h2>受付</h2><p>患者さんのiPhone・院のiPad・紙から、同じ患者情報へ入ります。</p></div></div>
     <div class="reception-layout">
       <article id="qrBox" class="qr-card">
-        <h3>患者さんのiPhone受付</h3><img id="qrImage" alt="初診受付QRコード"><p class="small">同じWi-FiにつないだiPhoneで読み取ります。</p><a id="receptionLink" target="_blank"><span id="receptionUrl"></span></a>
+        <h3>患者さんのiPhone受付</h3><img id="qrImage" src="/api/reception/qr?v=39" alt="初診・再診共通受付QRコード"><p id="qrStatus" class="small">QRが表示されない場合は、下の受付URLをタップしてください。</p><p class="small">同じWi-FiにつないだiPhoneで読み取ります。</p><a id="receptionLink" target="_blank"><span id="receptionUrl"></span></a>
       </article>
       <article id="qrUnavailable" class="qr-card hidden"><h3>QR受付はサーバー起動時に利用できます</h3><p>このフォルダの <b>start-bodyos.bat</b> から起動してください。index.htmlを直接開いた場合は、院のiPad入力を利用できます。</p></article>
       <article class="queue-wrap"><div class="queue-head"><h3>受付待ち</h3><button class="small-btn" onclick="Reception.refresh()">更新</button></div><div id="receptionQueue"><p class="small">受付待ちはありません。</p></div><button onclick="Reception.useIPad()">院のiPadで直接入力</button></article>

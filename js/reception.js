@@ -59,7 +59,7 @@ const Reception = (() => {
     }
     try{
       const cfg=await (await fetch('/api/config')).json();
-      $('receptionUrl').textContent=cfg.receptionUrl; $('receptionLink').href=cfg.receptionUrl; $('qrImage').src='/api/reception/qr?'+Date.now();
+      $('receptionUrl').textContent=cfg.receptionUrl; $('receptionLink').href=cfg.receptionUrl; const img=$('qrImage'); if(img){ img.src='/api/reception/qr?v='+Date.now(); img.onload=()=>{ if($('qrStatus')) $('qrStatus').textContent='このQRを患者さんのiPhoneで読み取ってください。'; }; img.onerror=()=>{ if($('qrStatus')) $('qrStatus').textContent='QRの読み込みに失敗しました。下の受付URLをタップしてください。'; }; }
       await refresh(); setInterval(refresh,5000);
     }catch{ $('qrUnavailable').classList.remove('hidden'); }
   }
