@@ -31,66 +31,12 @@ textarea{width:100%;font-size:17px;padding:12px;border-radius:12px;border:1px so
 .reception-shell{max-width:760px;margin:0 auto;padding:16px}.reception-head{background:#154266;color:white;border-radius:22px;padding:22px;margin-bottom:14px}.reception-head h1{margin:4px 0 8px}.reception-head p{margin:0}.reception-form details{margin-top:12px}.reception-form summary{cursor:pointer;font-weight:800;color:#154266}
 @media(max-width:760px){.form-grid.two,.form-grid.three,.form-grid.four,.form-grid.five,.reception-layout{grid-template-columns:1fr}.step-nav{font-size:13px}.step-nav a{padding:8px 4px}.intake-toolbar{align-items:stretch;flex-direction:column}.intake-toolbar button{width:100%}.reception-shell{padding:10px}.panel,.card{padding:14px}.hero{padding:18px}.hero h1{font-size:30px}}
 
-
-/* 日報・診察記録 */
-.step-nav{grid-template-columns:repeat(4,1fr)}
-.daily-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
-.daily-card{background:#fff;border:1px solid #d8c9b5;border-radius:16px;padding:15px;margin-top:14px}
-.daily-card h3{margin:0 0 5px;color:#154266}
-.choice-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
-.choice-chip{margin:0;position:relative}
-.choice-chip input{position:absolute;opacity:0;pointer-events:none}
-.choice-chip span{display:block;border:1px solid #c9c9c9;background:#f8f6f1;border-radius:999px;padding:9px 13px;font-weight:800;color:#2e2e2e;cursor:pointer}
-.choice-chip input:checked+span{background:#154266;color:#fff;border-color:#154266}
-.body-map{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-.compact-map{grid-template-columns:repeat(2,1fr)}
-.abdomen-map{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px;padding:12px;border:2px solid #b8924a;border-radius:45% 45% 28% 28%;background:#f8f6f1}
-.map-zone{min-height:58px;margin:0;background:#fff;color:#154266;border:1px solid #c9c9c9;padding:8px;font-size:14px}
-.map-zone small{display:block;font-size:10px;font-weight:500;color:#8a8178;margin-top:3px}
-.map-zone.active{background:#f2e8d4;color:#154266;border:2px solid #b8924a}
-.map-zone.strong{background:#154266;color:#fff;border:2px solid #154266}
-.map-zone.strong small{color:#fff}
-.suggestions-card{border-left:6px solid #b8924a}
-.suggestion-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.suggestion-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px}
-.suggestion-item{margin:0;display:flex;gap:9px;align-items:flex-start;border:1px solid #d8c9b5;border-radius:12px;padding:10px;background:#f8f6f1}
-.suggestion-item input{width:auto;margin:3px 0 0}
-.suggestion-item span{font-weight:500;line-height:1.45}.suggestion-item b{display:block;color:#b8924a;font-size:11px;margin-bottom:3px}
-.save-bar{position:sticky;bottom:8px;display:grid;grid-template-columns:2fr 1fr;gap:10px;align-items:center;background:rgba(248,246,241,.96);border:1px solid #d8c9b5;border-radius:16px;padding:10px;margin-top:14px;box-shadow:0 8px 25px rgba(0,0,0,.12)}
-.save-bar .status-text{grid-column:1/-1}
-@media(max-width:760px){.daily-grid,.suggestion-list{grid-template-columns:1fr}.body-map{grid-template-columns:repeat(2,1fr)}.step-nav{grid-template-columns:repeat(4,1fr);overflow:auto}.step-nav a{font-size:11px}.save-bar{grid-template-columns:1fr;position:static}}
-.fire-diagnosis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.fire-limb{border:1px solid #d8c9b5;border-radius:14px;padding:10px;background:#f8f6f1}
-.fire-limb h4{margin:0 0 8px;color:#154266;font-size:16px;text-align:center}
-.fire-points{display:grid;grid-template-columns:1fr;gap:7px}
-.fire-point{min-height:54px}
-@media(max-width:760px){.fire-diagnosis{grid-template-columns:1fr}.fire-points{grid-template-columns:repeat(3,1fr)}.fire-point{font-size:12px;padding:7px}.fire-point small{font-size:9px}}
-.treatment-grid{align-items:stretch}.routine-card{border-left:6px solid #154266}.treatment-method-card{border-left:6px solid #b8924a}
-.engine-note{margin-top:12px;padding:10px 12px;border-radius:10px;background:#f8f6f1;border:1px dashed #b8924a;font-size:12px;color:#6f655b;line-height:1.55}
-.suggestion-button{display:flex;flex-direction:column;align-items:flex-start;gap:4px;background:#f8f6f1;color:#154266;border:1px solid #d8c9b5;border-radius:12px;padding:11px;margin:0;min-height:64px;text-align:left}
-.suggestion-button:hover{border-color:#b8924a;background:#fff}.suggestion-button small{color:#756b61;font-weight:500}
-.case-summary-card{border-top:5px solid #154266}.case-summary{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid #d8c9b5;border-radius:12px;overflow:hidden;margin-top:10px}
-.summary-row{display:grid;grid-template-columns:130px 1fr;gap:10px;padding:10px 12px;border-bottom:1px solid #e6ddd2;background:#fff;min-height:44px}.summary-row:nth-child(odd){background:#fbf9f5}.summary-row b{color:#154266}.summary-row span{line-height:1.45}
-@media(max-width:760px){.case-summary{grid-template-columns:1fr}.summary-row{grid-template-columns:105px 1fr}}
-
-/* v3.5 UGLAB-centered clinical flow */
-.ug-axis-card{border:2px solid #154266;background:linear-gradient(180deg,#fff,#f4f7f9);margin-bottom:18px}
-.ug-axis-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
-.ug-priority{display:grid;gap:10px;margin-top:12px}
-.ug-priority-row{display:grid;grid-template-columns:50px 1fr;gap:12px;align-items:center;padding:12px;border:1px solid #c9c9c9;border-radius:12px;background:#fff}
-.ug-priority-code{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:#154266;color:#fff;font-weight:700;font-size:20px}
-.ug-priority-row b,.ug-priority-row strong,.ug-priority-row span{display:block}
-.ug-priority-row strong{color:#8a682a;margin:2px 0}
-.module-divider{display:flex;align-items:baseline;gap:12px;margin:22px 0 12px;padding-bottom:8px;border-bottom:2px solid #b8924a}
-.module-divider span{font-weight:700;font-size:20px;color:#154266}.module-divider small{color:#666}
-.engine-ug-axis{display:flex;flex-direction:column;gap:4px;padding:12px 14px;margin-bottom:10px;border-left:5px solid #154266;background:#f4f7f9;border-radius:8px}
-@media(max-width:700px){.ug-axis-head{display:block}.ug-axis-head .small-btn{margin-top:10px}.ug-priority-row{grid-template-columns:42px 1fr}.ug-priority-code{width:40px;height:40px}}
-
-/* v3.6 初診・再診QR受付 */
-.reception-mode-tabs{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}
-.mode-tab{margin:0;background:#f8f6f1;color:#154266;border:1px solid #d8c9b5;font-size:17px;font-weight:900}
-.mode-tab.active{background:#154266;color:#fff;border-color:#154266}
-.reception-guide{padding:12px 14px;border-left:5px solid #b8924a;background:#f8f6f1;border-radius:10px;line-height:1.6;margin:0 0 14px}
-.reception-badge{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:900}
-.reception-badge.new{background:#e8f1f7;color:#154266}.reception-badge.revisit{background:#f2e8d4;color:#76591d}
-@media(max-width:520px){.reception-mode-tabs{grid-template-columns:1fr 1fr}.mode-tab{font-size:15px;padding:11px 5px}}
+/* v3.7 院内運用 */
+.clinic-actionbar{position:sticky;top:0;z-index:1000;display:flex;gap:8px;align-items:center;padding:8px 10px;background:rgba(248,246,241,.96);border-bottom:1px solid #c9c9c9;backdrop-filter:blur(8px);overflow-x:auto}
+.clinic-actionbar button{white-space:nowrap;margin:0}
+.reception-type-select{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.reception-type-select label{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border:1px solid #c9c9c9;border-radius:12px;background:#fff;font-weight:700}
+.reception-type-select input{width:auto}
+.visit-badge{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-size:.78rem;font-weight:700}
+.visit-badge.new{background:#eef5e9;color:#315b2b}.visit-badge.revisit{background:#e8f0f6;color:#154266}
+@media(max-width:640px){.clinic-actionbar{padding:6px}.clinic-actionbar button{padding:9px 11px;font-size:.86rem}.reception-type-select{grid-template-columns:1fr}}

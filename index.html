@@ -10,43 +10,39 @@
 
 <!-- 患者のiPhone受付画面 -->
 <main id="receptionApp" class="reception-shell hidden">
-  <header class="reception-head"><div class="hero-label">推拿處はりきゅあ</div><h1>受付</h1><p>初診・再診を選んでご入力ください。</p></header>
+  <header class="reception-head"><div class="hero-label">推拿處はりきゅあ</div><h1 id="receptionTitle">初診受付</h1><p id="receptionLead">個人情報のみご入力ください。問診は院長がお話を伺います。</p></header>
   <section id="receptionForm" class="panel reception-form">
-    <div class="reception-mode-tabs">
-      <button id="modeNew" type="button" class="mode-tab active" onclick="Reception.setMode('new')">初めての方</button>
-      <button id="modeRevisit" type="button" class="mode-tab" onclick="Reception.setMode('revisit')">再診の方</button>
+    <div class="reception-type-select">
+      <label><input type="radio" name="receptionType" value="new" checked> 初診の方</label>
+      <label><input type="radio" name="receptionType" value="revisit"> 再診の方</label>
     </div>
-
-    <div id="newReceptionForm">
-      <p class="reception-guide"><b>初めての方</b><br>個人情報のみご入力ください。問診は院長がお話を伺います。</p>
-      <div class="form-grid two"><div><label>お名前 <span class="required">必須</span></label><input id="rName" autocomplete="name"></div><div><label>ふりがな</label><input id="rKana"></div></div>
-      <div class="form-grid four"><div><label>生年 <span class="required">必須</span></label><input id="rYear" type="number" inputmode="numeric" placeholder="1980"></div><div><label>月</label><input id="rMonth" type="number" inputmode="numeric" min="1" max="12"></div><div><label>日</label><input id="rDay" type="number" inputmode="numeric" min="1" max="31"></div><div><label>性別</label><select id="rGender"><option value="">選択</option><option>女</option><option>男</option><option>不明</option></select></div></div>
-      <details><summary>出生時刻（分かる方のみ）</summary><div class="form-grid two"><div><label>時</label><input id="rHour" type="number" min="0" max="23" inputmode="numeric"></div><div><label>分</label><input id="rMinute" type="number" min="0" max="59" inputmode="numeric"></div></div></details>
-      <div class="form-grid two"><div><label>郵便番号</label><input id="rPostal" inputmode="numeric" autocomplete="postal-code"></div><div><label>電話番号 <span class="required">必須</span></label><input id="rPhone" inputmode="tel" autocomplete="tel"></div></div>
-      <div><label>ご住所</label><input id="rAddress" autocomplete="street-address"></div>
-      <div class="form-grid two"><div><label>E-mail（任意）</label><input id="rEmail" type="email" autocomplete="email"></div><div><label>ご職業</label><input id="rOccupation"></div></div>
-      <div class="form-grid two"><div><label>勤務地</label><input id="rWorkplace"></div><div><label>通勤方法・所要時間</label><input id="rCommute"></div></div>
-      <label class="consent"><input id="rConsent" type="checkbox"><span>入力した個人情報を、推拿處はりきゅあの受付・カルテ作成に利用することに同意します。</span></label>
-      <button class="green large" onclick="Reception.submit()">初診受付を完了する</button>
-    </div>
-
-    <div id="revisitReceptionForm" class="hidden">
-      <p class="reception-guide"><b>再診の方</b><br>お名前と生年月日をご入力ください。院のカルテを受付へ呼び出します。</p>
-      <div><label>お名前 <span class="required">必須</span></label><input id="rrName" autocomplete="name" placeholder="例：山田 太郎"></div>
-      <div class="form-grid three"><div><label>生年 <span class="required">必須</span></label><input id="rrYear" type="number" inputmode="numeric" placeholder="1980"></div><div><label>月 <span class="required">必須</span></label><input id="rrMonth" type="number" inputmode="numeric" min="1" max="12"></div><div><label>日 <span class="required">必須</span></label><input id="rrDay" type="number" inputmode="numeric" min="1" max="31"></div></div>
-      <button class="green large" onclick="Reception.submitRevisit()">再診受付を完了する</button>
-    </div>
+    <div class="form-grid two"><div><label>お名前 <span class="required">必須</span></label><input id="rName" autocomplete="name"></div><div class="new-only"><label>ふりがな</label><input id="rKana"></div></div>
+    <div class="form-grid four"><div><label>生年 <span class="required">必須</span></label><input id="rYear" type="number" inputmode="numeric" placeholder="1980"></div><div><label>月 <span class="required">必須</span></label><input id="rMonth" type="number" inputmode="numeric" min="1" max="12"></div><div><label>日 <span class="required">必須</span></label><input id="rDay" type="number" inputmode="numeric" min="1" max="31"></div><div class="new-only"><label>性別</label><select id="rGender"><option value="">選択</option><option>女</option><option>男</option><option>不明</option></select></div></div>
+    <details class="new-only"><summary>出生時刻（分かる方のみ）</summary><div class="form-grid two"><div><label>時</label><input id="rHour" type="number" min="0" max="23" inputmode="numeric"></div><div><label>分</label><input id="rMinute" type="number" min="0" max="59" inputmode="numeric"></div></div></details>
+    <div class="form-grid two new-only"><div><label>郵便番号</label><input id="rPostal" inputmode="numeric" autocomplete="postal-code"></div><div><label>電話番号 <span id="rPhoneRequired" class="required">必須</span></label><input id="rPhone" inputmode="tel" autocomplete="tel"></div></div>
+    <div class="new-only"><label>ご住所</label><input id="rAddress" autocomplete="street-address"></div>
+    <div class="form-grid two new-only"><div><label>E-mail（任意）</label><input id="rEmail" type="email" autocomplete="email"></div><div><label>ご職業</label><input id="rOccupation"></div></div>
+    <div class="form-grid two new-only"><div><label>勤務地</label><input id="rWorkplace"></div><div><label>通勤方法・所要時間</label><input id="rCommute"></div></div>
+    <label class="consent"><input id="rConsent" type="checkbox"><span>入力した個人情報を、推拿處はりきゅあの受付・カルテ作成に利用することに同意します。</span></label>
+    <button class="green large" onclick="Reception.submit()">受付を完了する</button>
     <p id="receptionSubmitStatus" class="status-text"></p>
   </section>
-  <section id="receptionThanks" class="panel hidden thanks"><h2 id="receptionThanksTitle">受付が完了しました</h2><p>この画面を閉じて、そのままお待ちください。</p></section>
+  <section id="receptionThanks" class="panel hidden thanks"><h2>受付が完了しました</h2><p id="receptionThanksText">この画面を閉じて、そのままお待ちください。</p></section>
 </main>
 
 <!-- 院内画面 -->
 <div id="clinicApp" class="app">
+  <nav class="clinic-actionbar no-print">
+    <button class="green" onclick="Records.saveClinic()">💾 保存</button>
+    <button onclick="Reports.chart()">📄 カルテ</button>
+    <button onclick="Reports.patient()">🧾 レポート</button>
+    <button onclick="window.print()">🖨 印刷</button>
+    <button onclick="document.getElementById('receptionDesk').scrollIntoView({behavior:'smooth'})">👥 受付</button>
+  </nav>
   <div class="hero"><div class="hero-label">UG LAB</div><h1>BodyOS</h1><p>カルテは記憶媒体。BodyOSは治療のため。</p></div>
 
   <nav class="step-nav no-print">
-    <a href="#receptionDesk"><span>1</span>受付</a><a href="#step2"><span>2</span>問診</a><a href="#step3"><span>3</span>BodyOS</a><a href="#step4"><span>4</span>日報</a>
+    <a href="#receptionDesk"><span>1</span>受付</a><a href="#step2"><span>2</span>問診</a><a href="#step3"><span>3</span>BodyOS</a>
   </nav>
 
   <!-- 1 受付 -->
@@ -56,9 +52,10 @@
       <article id="qrBox" class="qr-card">
         <h3>患者さんのiPhone受付</h3><img id="qrImage" alt="初診受付QRコード"><p class="small">同じWi-FiにつないだiPhoneで読み取ります。</p><a id="receptionLink" target="_blank"><span id="receptionUrl"></span></a>
       </article>
-      <article id="qrUnavailable" class="qr-card hidden"><h3>QR受付はサーバー起動時に利用できます</h3><p>このフォルダの <b>start-bodyos.bat</b> から起動してください。index.htmlを直接開いた場合は、院のiPad入力を利用できます。</p></article>
+      <article id="qrUnavailable" class="qr-card hidden"><h3>QR受付はサーバー起動時に利用できます</h3><p>このフォルダの <b>start-bodyos.bat</b> から起動してください。GitHub Pagesやindex.html直開きでは院内保存・QR受付は使えません。</p></article>
       <article class="queue-wrap"><div class="queue-head"><h3>受付待ち</h3><button class="small-btn" onclick="Reception.refresh()">更新</button></div><div id="receptionQueue"><p class="small">受付待ちはありません。</p></div><button onclick="Reception.useIPad()">院のiPadで直接入力</button></article>
     </div>
+  <p class="small">院内保存先：<span id="dataLocation">確認中</span></p>
   </section>
 
   <!-- 個人情報。QRからもiPadからもここへ入る -->
@@ -116,97 +113,10 @@
     <div class="form-grid two"><button onclick="Reports.chart()">カルテ作成</button><button onclick="Reports.patient()">患者レポート作成</button></div>
     <input id="researchMode" type="checkbox" class="hidden"><select id="outcome" class="hidden"><option value=""></option></select><input id="researchId" class="hidden"><div id="qualityStatus" class="hidden"></div><div id="researchOnly" class="hidden"></div>
   </section>
-
-
-  <!-- 4 日報・診察記録 -->
-  <section id="step4" class="panel no-print daily-panel">
-    <div class="section-title"><span class="step-number">4</span><div><h2>BodyOS診療記録</h2><p>UGLABで身体の現在地を定め、長野式診断モジュールで処置法を絞り込みます。</p></div></div>
-
-    <article class="daily-card ug-axis-card">
-      <div class="ug-axis-head">
-        <div><div class="os-kicker">Current OS｜最上位</div><h3>UGLAB 現在地</h3><p class="small">長野式の所見より先に、今日の身体が何を優先しているかを確認します。</p></div>
-        <button class="small-btn" onclick="Daily.refreshUGPriority()">現在地を更新</button>
-      </div>
-      <div id="ugPriority" class="ug-priority"><p class="small">施術前UGLABを選択すると、治療の入口と再検査が表示されます。</p></div>
-    </article>
-
-    <div class="module-divider"><span>長野式診断モジュール</span><small>脉状・腹診・火穴診・局所診</small></div>
-
-    <div class="daily-grid">
-      <article class="daily-card">
-        <h3>脉状</h3><p class="small">必要な脉状を複数選択。</p>
-        <div id="pulseChoices" class="choice-grid"></div>
-        <label>脉状メモ</label><textarea id="pulseMemo" rows="3" placeholder="左右差、前後の変化など"></textarea>
-      </article>
-
-      <article class="daily-card">
-        <h3>腹診</h3><p class="small">腹位をタップ。1回＝反応、2回＝強反応、3回＝解除。</p>
-        <div id="abdomenMap" class="abdomen-map"></div>
-        <label>腹診メモ</label><textarea id="abdomenMemo" rows="3" placeholder="必要な補足だけ"></textarea>
-      </article>
-    </div>
-
-    <div class="daily-grid">
-      <article class="daily-card">
-        <h3>火穴診</h3><p class="small">図は使わず、左右上下肢の火穴名をタップします。</p>
-        <div id="fireMap" class="fire-diagnosis"></div>
-        <label>火穴診メモ</label><textarea id="fireMemo" rows="3"></textarea>
-      </article>
-
-      <article class="daily-card">
-        <h3>局所診</h3><p class="small">反応部位をタップします。</p>
-        <div id="localMap" class="body-map"></div>
-        <label>局所診メモ</label><textarea id="localMemo" rows="3" placeholder="可動、圧痛、左右差など"></textarea>
-      </article>
-    </div>
-
-    <div class="daily-grid treatment-grid">
-      <article class="daily-card routine-card">
-        <h3>ルーティン処置</h3><p class="small">診断とは別に、高頻度で行う基本処置。</p>
-        <div id="routineChoices" class="choice-grid"></div>
-      </article>
-
-      <article class="daily-card treatment-method-card">
-        <h3>処置法</h3><p class="small">穴名は出さず、処置法までを記録します。</p>
-        <div id="treatmentMethodChoices" class="choice-grid"></div>
-      </article>
-    </div>
-
-    <article class="daily-card suggestions-card">
-      <div class="suggestion-head"><div><h3>BodyOS統合判断（ちゃんペラ）</h3><p class="small">UGLABの優先方向を軸に、長野式所見から処置法候補だけを表示します。</p></div><button class="small-btn" onclick="Daily.refreshSuggestions()">候補を更新</button></div>
-      <div id="treatmentSuggestions" class="suggestion-list"><p class="small">所見を入力すると候補が表示されます。</p></div>
-      <div class="engine-note">処置穴・補瀉・手順は表示しません。現在の確定ルールは「火穴反応 → 気水穴処置」のみです。</div>
-    </article>
-
-    <article class="daily-card">
-      <h3>実施手技（カルテ記録）</h3>
-      <div id="manualTechniqueChoices" class="choice-grid"></div>
-      <label>追加した処置・施術内容</label><textarea id="dailyTreatmentMemo" rows="3" placeholder="必要な補足だけ"></textarea>
-    </article>
-
-    <article class="daily-card">
-      <h3>再検査・変化</h3><p class="small">診察時と同じ基準で変化を確認します。</p>
-      <div id="changeChoices" class="choice-grid"></div>
-      <div class="form-grid two"><div><label>施術前の所見</label><textarea id="beforeFindingMemo" rows="4"></textarea></div><div><label>施術後の所見</label><textarea id="afterFindingMemo" rows="4"></textarea></div></div>
-      <label>経過・今日の気付き</label><textarea id="dailyInsight" rows="4"></textarea>
-    </article>
-
-    <article class="daily-card case-summary-card">
-      <div class="suggestion-head"><div><h3>症例記録プレビュー</h3><p class="small">UGLABを軸に「現在地 → 長野式所見 → 処置法 → 再検査」の形で整理します。</p></div><button class="small-btn" onclick="Daily.refreshCaseSummary()">更新</button></div>
-      <div id="caseSummary" class="case-summary"><p class="small">入力後に更新してください。</p></div>
-    </article>
-
-    <div class="save-bar">
-      <button class="green large" onclick="Daily.saveToClinic()">院内PCへ保存</button>
-      <button onclick="Daily.clearDaily()">日報だけクリア</button>
-      <span id="dailySaveStatus" class="status-text"></span>
-    </div>
-  </section>
-
   <section id="chartReport" class="hidden"></section><section id="patientReport" class="hidden"></section>
 </div>
 
-<script src="data/solarTerms.js"></script><script src="data/ugdb.js"></script><script src="data/caredb.js"></script><script src="data/dailyrules.js"></script>
-<script src="js/calendar.js"></script><script src="js/bodyos.js"></script><script src="js/intake.js"></script><script src="js/daily.js"></script><script src="js/reception.js"></script><script src="js/reports.js"></script><script src="js/records.js"></script><script src="js/app.js"></script>
+<script src="data/solarTerms.js"></script><script src="data/ugdb.js"></script><script src="data/caredb.js"></script>
+<script src="js/calendar.js"></script><script src="js/bodyos.js"></script><script src="js/intake.js"></script><script src="js/reception.js"></script><script src="js/reports.js"></script><script src="js/records.js"></script><script src="js/app.js"></script>
 </body>
 </html>

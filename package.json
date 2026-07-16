@@ -1,8 +1,8 @@
 {
   "name": "bodyos-clinic",
-  "version": "3.2.0",
+  "version": "3.0.0",
   "private": true,
-  "description": "BodyOS 受付・問診・治療OS・日報統合版",
+  "description": "BodyOS 受付・問診・治療OS",
   "scripts": {
     "start": "node server.js"
   },

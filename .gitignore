@@ -1,0 +1,5 @@
+node_modules/
+../Data/
+Data/
+clinic_data/
+*.log

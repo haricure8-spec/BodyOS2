@@ -145,7 +145,8 @@ const Records = (() => {
       researchId, patientId:patient.patientId, patientKey:patient.patientKey, visitNumber, isNewPatient:patient.isNew,
       createdAt:nowISO(), visitDate, softwareVersion:SOFTWARE_VERSION, bodyosLogicVersion:BODYOS_LOGIC_VERSION,
       dataQuality:checkQuality(false),
-      patient:{name:val("patientName"),gender:val("gender"),birth:{year:val("year"),month:val("month"),day:val("day"),hour:val("hour"),minute:val("minute")}},
+      patient:{name:val("patientName"),kana:val("patientKana"),gender:val("gender"),birth:{year:val("year"),month:val("month"),day:val("day"),hour:val("hour"),minute:val("minute")},postal:val("postalCode"),address:val("address"),phone:val("phone"),email:val("email"),occupation:val("occupation"),workplace:val("workplace"),commute:val("commute")},
+      intake:(typeof Intake!=="undefined"&&Intake.collect)?Intake.collect():{},
       chiefComplaint:val("chiefComplaint"),
       meishiki:{pillars:result.pillars,input:result.input,detail:{lichun:result.detail?.yearP?.lichun||null,monthTerm:result.detail?.monthP?.monthInfo||null}},
       fiveElements:counts, prediction:ug.predicted, beforeUG:before, afterUG:after,
@@ -238,7 +239,30 @@ const Records = (() => {
     alert("全研究データを削除しました。");
   }
 
+
+  async function saveClinic(){
+    if(location.protocol!=="http:" || !(location.hostname==="localhost" || /^\d+\.\d+\.\d+\.\d+$/.test(location.hostname))){
+      alert("院内PCへ保存するには start-bodyos.bat から起動し、http://localhost:3000 または院内IPで開いてください。");
+      return;
+    }
+    try{
+      const record=collect();
+      const currentId=sessionStorage.getItem("bodyos_current_patient_id")||"";
+      if(currentId) record.patientId=currentId;
+      const res=await fetch("/api/records",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(record)});
+      const out=await res.json();
+      if(!res.ok) throw new Error(out.error||"保存できませんでした。");
+      sessionStorage.setItem("bodyos_current_patient_id",out.patientId);
+      Intake.saveDraft(true);
+      alert(`院内PCへ保存しました。\n\n患者ID: ${out.patientId}\n来院回数: ${out.visitNumber}\n保存先: ${out.dataDir}`);
+    }catch(e){ alert(e.message||String(e)); }
+  }
+
+  async function loadClinicHistory(patientId){
+    if(!patientId) return [];
+    try{ const r=await fetch(`/api/records?patientId=${encodeURIComponent(patientId)}`); return r.ok?await r.json():[]; }catch{return [];}
+  }
   window.addEventListener("DOMContentLoaded", toggleResearchMode);
 
-  return {toggleResearchMode,checkQuality,save,exportJSON,exportCSV,collect,getRecords,getPatients,findExistingPatientOnly,deleteCurrentPatient,deleteAllData};
+  return {toggleResearchMode,checkQuality,save,saveClinic,loadClinicHistory,exportJSON,exportCSV,collect,getRecords,getPatients,findExistingPatientOnly,deleteCurrentPatient,deleteAllData};
 })();
